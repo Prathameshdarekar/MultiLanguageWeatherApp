@@ -1,0 +1,49 @@
+﻿@using WeatherApp.Resources
+
+@{
+    ViewBag.Title = Strings.AppTitle;
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">@Strings.AppTitle</h1>
+
+    <div class="form-group">
+        <label for="languageSelector" class="form-label">@Strings.SelectLanguage</label>
+        <select id="languageSelector" class="form-select" onchange="changeLanguage()">
+            <option value="en" @(ViewBag.CurrentCulture == "en" ? "selected" : "")>English</option>
+            <option value="es" @(ViewBag.CurrentCulture == "es" ? "selected" : "")>Spanish</option>
+            <option value="hi" @(ViewBag.CurrentCulture == "hi" ? "selected" : "")>हिन्दी</option> <!-- Added Hindi option -->
+        </select>
+    </div>
+    <br />
+
+    <div id="loading" class="text-center mb-3" style="display:none;">
+        <iframe src="https://giphy.com/embed/xTkcEQACH24SMPxIQg" width="100" height="100" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+    </div>
+
+    @using (Html.BeginForm("GetWeather", "Weather", FormMethod.Post, new { @class = "form-inline", id = "weatherForm" }))
+    {
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="city" name="city" placeholder="@Strings.EnterCity" required aria-label="@Strings.EnterCity" />
+            <button type="submit" class="btn btn-primary">@Strings.GetWeather</button>
+        </div>
+    }
+
+    <p class="text-center text-muted">* @Strings.NoteAboutLanguage</p>
+</div>
+
+@section Scripts {
+    <script>
+        // Show the loading spinner when the form is submitted
+        document.getElementById('weatherForm').onsubmit = function () {
+            document.getElementById('loading').style.display = 'block';
+        };
+    </script>
+
+    <script>
+        function changeLanguage() {
+            var selectedLanguage = document.getElementById("languageSelector").value;
+            window.location.href = '@Url.Action("SetLanguage", "Weather")?lang=' + selectedLanguage;
+        }
+    </script>
+}

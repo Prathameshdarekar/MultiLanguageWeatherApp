@@ -1,0 +1,36 @@
+﻿@model WeatherApp.Models.WeatherInfo
+@using WeatherApp.Resources
+
+<div class="container mt-5">
+    @if (Model != null)
+    {
+        <h2 class="text-center">@Strings.WeatherIn @Model.Name</h2> <!-- Localized title -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">@Strings.Temperature: @Model.Main.Temperature °C</h5> <!-- Localized temperature text -->
+                <p class="card-text">@Strings.Humidity: @Model.Main.Humidity %</p> <!-- Localized humidity text -->
+                <p class="card-text">@Strings.WindSpeed: @Model.Wind.Speed m/s</p> <!-- Localized wind speed text -->
+
+                @if (Model.Weather != null && Model.Weather.Length > 0)
+                {
+                    // Store icon code in a variable
+                    string iconCode = Model.Weather[0].Icon;
+                    // Build the icon URL
+                    string iconUrl = $"https://openweathermap.org/img/wn/{iconCode}@2x.png";
+
+                    <img src="@iconUrl" alt="@Strings.WeatherIcon" class="img-fluid" />
+                    <!-- Localized alt text for image -->
+                    <p class="mt-3">@Strings.Description: @Model.Weather[0].Description</p> <!-- Localized description text -->
+                }
+                else
+                {
+                    <p class="text-danger">@Strings.NoWeatherDataAvailable</p> <!-- Localized message for no data -->
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <p class="text-danger">@Strings.WeatherInfoNotAvailable</p> <!-- Localized error message -->
+    }
+</div>
